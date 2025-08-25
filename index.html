@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dayanıklılık Sporcuları için Modern Beslenme Rehberi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+        }
+        
+        .light {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+        }
+        
+        .gradient-bg {
+            background: var(--primary-gradient);
+        }
+        
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .calculator-card {
+            background: linear-gradient(145deg, #ffffff, #f0f4f8);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .dark .calculator-card {
+            background: linear-gradient(145deg, #1e293b, #334155);
+            border: 1px solid #475569;
+        }
+        
+        .supplement-effective {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .supplement-ineffective {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .floating-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .floating-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="light transition-colors duration-300" id="body">
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Floating Navigation -->
+    <div class="floating-nav">
+        <div class="bg-white dark:bg-gray-800 rounded-full shadow-lg p-2 space-y-2">
+            <a href="#hero" class="block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="#energy-stores" class="block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <i class="fas fa-battery-full"></i>
+            </a>
+            <a href="#carbohydrates" class="block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <i class="fas fa-seedling"></i>
+            </a>
+            <a href="#supplements" class="block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <i class="fas fa-pills"></i>
+            </a>
+            <a href="#tools" class="block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <i class="fas fa-calculator"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="fade-in">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                    Dayanıklılık Sporcuları
+                    <span class="block text-yellow-300">Beslenme Rehberi</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                    Bisiklet, koşu ve triatlon sporcuları için bilimsel temelli yarış öncesi ve sırası beslenme stratejileri
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                    <button id="themeToggle" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                        <span id="themeText">Koyu Tema</span>
+                    </button>
+                </div>
+                <p class="text-gray-300 text-sm">
+                    <i class="fas fa-user-md mr-2"></i>
+                    Hazırlayan: <strong>Ümit Emre Erdoğan</strong>
+                </p>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <div class="animate-bounce">
+                <i class="fas fa-chevron-down text-white text-2xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <main class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        
+        <!-- Energy Stores Section -->
+        <section id="energy-stores" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-battery-full mr-4"></i>
+                        Vücuttaki Enerji Depoları
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Sporcunun vücudundaki glikojen depolarının gram cinsinden analizi ve süre hesaplamaları
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="calculator-card rounded-3xl p-8 card-hover">
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+                            <i class="fas fa-dumbbell text-blue-500 mr-3"></i>
+                            Kas Glikojen Depoları
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-xl">
+                                <p class="text-lg font-semibold text-blue-800 dark:text-blue-200">Normal Seviye</p>
+                                <p class="text-3xl font-bold text-blue-600">300-400g</p>
+                                <p class="text-sm text-blue-600 dark:text-blue-300">(70kg sporcu için)</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900 p-4 rounded-xl">
+                                <p class="text-lg font-semibold text-green-800 dark:text-green-200">Maksimum Kapasite</p>
+                                <p class="text-3xl font-bold text-green-600">600-800g</p>
+                                <p class="text-sm text-green-600 dark:text-green-300">Glikojen yüklemesi ile</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calculator-card rounded-3xl p-8 card-hover">
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+                            <i class="fas fa-liver text-orange-500 mr-3"></i>
+                            Karaciğer Glikojen Depoları
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-orange-50 dark:bg-orange-900 p-4 rounded-xl">
+                                <p class="text-lg font-semibold text-orange-800 dark:text-orange-200">Normal Seviye</p>
+                                <p class="text-3xl font-bold text-orange-600">80-120g</p>
+                                <p class="text-sm text-orange-600 dark:text-orange-300">Doymuş durumda</p>
+                            </div>
+                            <div class="bg-red-50 dark:bg-red-900 p-4 rounded-xl">
+                                <p class="text-lg font-semibold text-red-800 dark:text-red-200">Gece Sonrası</p>
+                                <p class="text-3xl font-bold text-red-600">50-75g</p>
+                                <p class="text-sm text-red-600 dark:text-red-300">%30-40 azalma</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Glycogen Calculator -->
+                <div class="calculator-card rounded-3xl p-8 mb-12">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                        <i class="fas fa-calculator text-purple-500 mr-3"></i>
+                        Glikojen Süre Hesaplayıcı
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vücut Ağırlığı (kg)</label>
+                            <input type="number" id="bodyWeight" value="70" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Egzersiz Yoğunluğu (%VO2max)</label>
+                            <input type="number" id="intensity" value="70" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <button onclick="calculateGlycogenDuration()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold">
+                                Hesapla
+                            </button>
+                        </div>
+                    </div>
+                    <div id="glycogenResult" class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-xl hidden">
+                        <h4 class="font-bold text-lg text-gray-800 dark:text-white mb-2">Hesaplanan Süre:</h4>
+                        <p id="durationText" class="text-2xl font-bold text-blue-600 dark:text-blue-400"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Carbohydrates Section -->
+        <section id="carbohydrates" class="py-20 bg-white dark:bg-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-seedling mr-4"></i>
+                        Karbonhidrat Türleri & Oranlar
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Optimum performans için bilimsel olarak kanıtlanmış karbonhidrat kombinasyonları
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-tint text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Glikoz</h3>
+                        <p class="text-sm opacity-90 mb-3">Hızlı emilim, anında enerji</p>
+                        <div class="text-2xl font-bold">~1 g/dk</div>
+                        <p class="text-xs opacity-75">Maksimum oksidasyon</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-leaf text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Maltodekstrin</h3>
+                        <p class="text-sm opacity-90 mb-3">Kararlı enerji salımı</p>
+                        <div class="text-2xl font-bold">~1 g/dk</div>
+                        <p class="text-xs opacity-75">Glikoza benzer</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-apple-alt text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Fruktoz</h3>
+                        <p class="text-sm opacity-90 mb-3">GLUT5 transportu</p>
+                        <div class="text-2xl font-bold">~0.5 g/dk</div>
+                        <p class="text-xs opacity-75">Karaciğerde metabolizma</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-cube text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Sakkaroz</h3>
+                        <p class="text-sm opacity-90 mb-3">1:1 glikoz-fruktoz</p>
+                        <div class="text-2xl font-bold">~1.5 g/dk</div>
+                        <p class="text-xs opacity-75">Kombine etki</p>
+                    </div>
+                </div>
+
+                <!-- Optimal Ratios -->
+                <div class="calculator-card rounded-3xl p-8 mb-12">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                        <i class="fas fa-balance-scale text-green-500 mr-3"></i>
+                        Optimum Fruktoz:Glikoz Oranı
+                    </h3>
+                    <div class="text-center mb-8">
+                        <div class="inline-block bg-gradient-to-r from-green-400 to-blue-500 text-white px-8 py-4 rounded-2xl">
+                            <div class="text-4xl font-bold">0.8 - 1.0 : 1</div>
+                            <p class="text-sm opacity-90 mt-2">Fruktoz : Glikoz/Maltodekstrin</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Ratio Calculator -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Toplam Karbonhidrat (g/saat)</label>
+                            <input type="number" id="totalCarbs" value="90" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <button onclick="calculateRatio()" class="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold mt-6">
+                                Oran Hesapla
+                            </button>
+                        </div>
+                    </div>
+                    <div id="ratioResult" class="mt-6 grid md:grid-cols-2 gap-4 hidden">
+                        <div class="bg-orange-100 dark:bg-orange-900 p-4 rounded-xl text-center">
+                            <h4 class="font-bold text-orange-800 dark:text-orange-200">Fruktoz</h4>
+                            <p id="fructoseAmount" class="text-2xl font-bold text-orange-600"></p>
+                        </div>
+                        <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-xl text-center">
+                            <h4 class="font-bold text-blue-800 dark:text-blue-200">Glikoz/Maltodekstrin</h4>
+                            <p id="glucoseAmount" class="text-2xl font-bold text-blue-600"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Race Duration Strategies -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-yellow-400 to-orange-500 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-clock text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-3">&lt; 90 Dakika</h3>
+                        <ul class="text-sm space-y-2 opacity-90">
+                            <li>• Glikojen yüklemesi gereksiz</li>
+                            <li>• Yarış öncesi optimizasyon</li>
+                            <li>• 30-60g/saat yeterli</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-stopwatch text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-3">90dk - 3 Saat</h3>
+                        <ul class="text-sm space-y-2 opacity-90">
+                            <li>• Orta düzey karbonhidrat</li>
+                            <li>• 60-90g/saat alım</li>
+                            <li>• Çoklu karbonhidrat önerili</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-red-500 to-pink-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-infinity text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-3">&gt; 3 Saat</h3>
+                        <ul class="text-sm space-y-2 opacity-90">
+                            <li>• Yüksek karbonhidrat alımı</li>
+                            <li>• 90-120g/saat</li>
+                            <li>• Çoklu transport zorunlu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Natural Food Sources -->
+        <section id="natural-foods" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-apple-alt mr-4"></i>
+                        Doğal Besin Kaynakları
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Doğal kaynaklardan optimal karbonhidrat kombinasyonları ve pratik tarifler
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="calculator-card rounded-3xl p-6 card-hover">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-seedling text-6xl text-amber-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800 dark:text-white">Hurma</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Glikoz:</span>
+                                <span class="font-semibold">35%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Fruktoz:</span>
+                                <span class="font-semibold">30%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Sakkaroz:</span>
+                                <span class="font-semibold">35%</span>
+                            </div>
+                            <div class="mt-4 p-3 bg-amber-50 dark:bg-amber-900 rounded-lg">
+                                <p class="text-amber-800 dark:text-amber-200 font-medium">3-4 adet = ~30g karbonhidrat</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calculator-card rounded-3xl p-6 card-hover">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-leaf text-6xl text-yellow-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800 dark:text-white">Muz</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Glikoz:</span>
+                                <span class="font-semibold">25%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Fruktoz:</span>
+                                <span class="font-semibold">25%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Nişasta:</span>
+                                <span class="font-semibold">50%</span>
+                            </div>
+                            <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
+                                <p class="text-yellow-800 dark:text-yellow-200 font-medium">1 orta boy = ~25g karbonhidrat</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calculator-card rounded-3xl p-6 card-hover">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-tint text-6xl text-orange-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800 dark:text-white">Bal</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Glikoz:</span>
+                                <span class="font-semibold">38%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Fruktoz:</span>
+                                <span class="font-semibold">31%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Diğer:</span>
+                                <span class="font-semibold">31%</span>
+                            </div>
+                            <div class="mt-4 p-3 bg-orange-50 dark:bg-orange-900 rounded-lg">
+                                <p class="text-orange-800 dark:text-orange-200 font-medium">1 yemek kaşığı = ~15g karbonhidrat</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Natural Recipe Calculator -->
+                <div class="calculator-card rounded-3xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                        <i class="fas fa-blender text-green-500 mr-3"></i>
+                        Doğal Karışım Hesaplayıcı
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hedef Karbonhidrat (g)</label>
+                            <input type="number" id="targetCarbs" value="60" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <button onclick="calculateNaturalMix()" class="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold mt-6">
+                                Karışım Hesapla
+                            </button>
+                        </div>
+                    </div>
+                    <div id="naturalMixResult" class="hidden">
+                        <h4 class="font-bold text-lg text-gray-800 dark:text-white mb-4">Önerilen Doğal Karışım:</h4>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-amber-100 dark:bg-amber-900 p-4 rounded-xl text-center">
+                                <h5 class="font-bold text-amber-800 dark:text-amber-200">Hurma</h5>
+                                <p id="dateAmount" class="text-xl font-bold text-amber-600"></p>
+                            </div>
+                            <div class="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-xl text-center">
+                                <h5 class="font-bold text-yellow-800 dark:text-yellow-200">Muz</h5>
+                                <p id="bananaAmount" class="text-xl font-bold text-yellow-600"></p>
+                            </div>
+                            <div class="bg-orange-100 dark:bg-orange-900 p-4 rounded-xl text-center">
+                                <h5 class="font-bold text-orange-800 dark:text-orange-200">Bal</h5>
+                                <p id="honeyAmount" class="text-xl font-bold text-orange-600"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Effective Supplements Section -->
+        <section id="supplements" class="py-20 bg-white dark:bg-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-pills mr-4"></i>
+                        Kanıtlanmış Etkili Supplementler
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Sadece bilimsel olarak kanıtlanmış, dayanıklılık performansını artıran supplementler
+                    </p>
+                </div>
+
+                <!-- Effective Supplements -->
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="supplement-effective text-white p-8 rounded-3xl card-hover">
+                        <div class="flex items-center mb-6">
+                            <i class="fas fa-coffee text-4xl mr-4"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold">Kafein</h3>
+                                <p class="opacity-90">Güçlü Kanıt</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Dozaj: 3-6 mg/kg</p>
+                                <p class="text-sm opacity-90">Egzersizden 30-90 dk önce</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Etki: %2-3 performans artışı</p>
+                                <p class="text-sm opacity-90">6 dk - 2.5 saat arası egzersizlerde</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="supplement-effective text-white p-8 rounded-3xl card-hover">
+                        <div class="flex items-center mb-6">
+                            <i class="fas fa-vial text-4xl mr-4"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold">Sodyum Bikarbonat</h3>
+                                <p class="opacity-90">Yüksek Yoğunluk İçin</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Dozaj: 0.2-0.4 g/kg</p>
+                                <p class="text-sm opacity-90">Egzersizden 60-90 dk önce</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Etki: Asit tamponlama</p>
+                                <p class="text-sm opacity-90">Interval antrenmanlar için ideal</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="supplement-effective text-white p-8 rounded-3xl card-hover">
+                        <div class="flex items-center mb-6">
+                            <i class="fas fa-capsules text-4xl mr-4"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold">Beta-alanin</h3>
+                                <p class="opacity-90">Orta Süre İçin</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Dozaj: 3.2-6.4 g/gün</p>
+                                <p class="text-sm opacity-90">En az 2 hafta yükleme</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Etki: Kas karnosin artışı</p>
+                                <p class="text-sm opacity-90">1-4 dakika arası egzersizlerde</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="supplement-effective text-white p-8 rounded-3xl card-hover">
+                        <div class="flex items-center mb-6">
+                            <i class="fas fa-leaf text-4xl mr-4"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold">Beetroot Nitrat</h3>
+                                <p class="opacity-90">Kanıtlanmış Etki</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Dozaj: 6-8 mmol/gün</p>
+                                <p class="text-sm opacity-90">Egzersizden 2-3 saat önce</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                                <p class="font-semibold">Etki: NO artışı</p>
+                                <p class="text-sm opacity-90">Oksijen verimliliği</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ineffective Supplements Warning -->
+                <div class="bg-red-50 dark:bg-red-900 border-l-4 border-red-500 p-6 rounded-xl mb-8">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-2xl mr-3"></i>
+                        <h3 class="text-xl font-bold text-red-800 dark:text-red-200">Dayanıklılık Sporları İçin Etkisiz/Tartışmalı</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div class="space-y-2">
+                            <p class="text-red-700 dark:text-red-300"><i class="fas fa-times mr-2"></i><strong>Kreatin:</strong> Dayanıklılık performansında etkisiz</p>
+                            <p class="text-red-700 dark:text-red-300"><i class="fas fa-times mr-2"></i><strong>Adaptojenik bitkiler:</strong> Yetersiz bilimsel kanıt</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-red-700 dark:text-red-300"><i class="fas fa-times mr-2"></i><strong>Antioksidan supplementler:</strong> Performansı engelleyebilir</p>
+                            <p class="text-red-700 dark:text-red-300"><i class="fas fa-times mr-2"></i><strong>Amino asit supplementleri:</strong> Gereksiz</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caffeine Calculator -->
+                <div class="calculator-card rounded-3xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                        <i class="fas fa-coffee text-brown-500 mr-3"></i>
+                        Kafein Doz Hesaplayıcı
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vücut Ağırlığı (kg)</label>
+                            <input type="number" id="caffeineWeight" value="70" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hedef Doz (mg/kg)</label>
+                            <select id="caffeineTarget" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="3">3 mg/kg (Minimum)</option>
+                                <option value="4.5" selected>4.5 mg/kg (Optimal)</option>
+                                <option value="6">6 mg/kg (Maksimum)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button onclick="calculateCaffeine()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold mt-6">
+                                Hesapla
+                            </button>
+                        </div>
+                    </div>
+                    <div id="caffeineResult" class="hidden">
+                        <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900 dark:to-orange-900 p-6 rounded-xl">
+                            <h4 class="font-bold text-lg text-gray-800 dark:text-white mb-4 text-center">Önerilen Kafein Dozajı:</h4>
+                            <div class="text-center">
+                                <p id="caffeineAmount" class="text-4xl font-bold text-amber-600 mb-2"></p>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Egzersizden 30-90 dakika önce alınız</p>
+                                <div class="grid md:grid-cols-3 gap-4 text-sm">
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded-lg text-center">
+                                        <p class="font-semibold">Kahve</p>
+                                        <p id="coffeeAmount" class="text-lg font-bold text-amber-600"></p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded-lg text-center">
+                                        <p class="font-semibold">Espresso</p>
+                                        <p id="espressoAmount" class="text-lg font-bold text-amber-600"></p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-3 rounded-lg text-center">
+                                        <p class="font-semibold">Tablet</p>
+                                        <p id="tabletAmount" class="text-lg font-bold text-amber-600"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hydration & Electrolytes -->
+        <section id="hydration" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-tint mr-4"></i>
+                        Hidrasyon & Elektrolit Dengesi
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Optimal performans için su ve mineral dengesi yönetimi
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-cube text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-3">Sodyum (Na+)</h3>
+                        <div class="space-y-2 text-sm opacity-90">
+                            <p><strong>Günlük Kayıp:</strong> 3500-7000 mg</p>
+                            <p><strong>Saatlik İhtiyaç:</strong> 200-700 mg</p>
+                            <p><strong>Kaynak:</strong> Tuz, spor içeceği</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-seedling text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-3">Potasyum (K+)</h3>
+                        <div class="space-y-2 text-sm opacity-90">
+                            <p><strong>Günlük Kayıp:</strong> 2000-4000 mg</p>
+                            <p><strong>Saatlik İhtiyaç:</strong> 150-300 mg</p>
+                            <p><strong>Kaynak:</strong> Muz, hurma</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-2xl card-hover">
+                        <i class="fas fa-atom text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-3">Magnezyum (Mg2+)</h3>
+                        <div class="space-y-2 text-sm opacity-90">
+                            <p><strong>Günlük Kayıp:</strong> 200-400 mg</p>
+                            <p><strong>Saatlik İhtiyaç:</strong> 15-50 mg</p>
+                            <p><strong>Kaynak:</strong> Kuruyemiş, yeşil yaprak</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Tools -->
+        <section id="tools" class="py-20 bg-white dark:bg-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-calculator mr-4"></i>
+                        İnteraktif Araçlar
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Kişiselleştirilmiş beslenme planınızı oluşturmak için pratik hesaplayıcılar
+                    </p>
+                </div>
+
+                <!-- Hydration Calculator -->
+                <div class="calculator-card rounded-3xl p-8 mb-12">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                        <i class="fas fa-tint text-blue-500 mr-3"></i>
+                        Hidrasyon Hesaplayıcı
+                    </h3>
+                    <div class="grid md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vücut Ağırlığı (kg)</label>
+                            <input type="number" id="hydrationWeight" value="70" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Egzersiz Süresi (saat)</label>
+                            <input type="number" id="exerciseDuration" value="2" step="0.5" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sıcaklık</label>
+                            <select id="temperature" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="cool">Serin (&lt;20°C)</option>
+                                <option value="moderate" selected>Orta (20-25°C)</option>
+                                <option value="hot">Sıcak (&gt;25°C)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button onclick="calculateHydration()" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold mt-6">
+                                Hesapla
+                            </button>
+                        </div>
+                    </div>
+                    <div id="hydrationResult" class="hidden">
+                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900 dark:to-cyan-900 p-6 rounded-xl">
+                            <h4 class="font-bold text-lg text-gray-800 dark:text-white mb-4 text-center">Hidrasyon Planı:</h4>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Saatlik Sıvı İhtiyacı</p>
+                                    <p id="hourlyFluid" class="text-3xl font-bold text-blue-600"></p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Toplam Sıvı İhtiyacı</p>
+                                    <p id="totalFluid" class="text-3xl font-bold text-cyan-600"></p>
+                                </div>
+                            </div>
+                            <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg text-center">
+                                    <p class="font-semibold text-gray-800 dark:text-white">Sodyum</p>
+                                    <p id="sodiumNeed" class="text-lg font-bold text-blue-600"></p>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg text-center">
+                                    <p class="font-semibold text-gray-800 dark:text-white">Potasyum</p>
+                                    <p id="potassiumNeed" class="text-lg font-bold text-purple-600"></p>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg text-center">
+                                    <p class="font-semibold text-gray-800 dark:text-white">Magnezyum</p>
+                                    <p id="magnesiumNeed" class="text-lg font-bold text-green-600"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Race Planning Tool -->
+                <div class="calculator-card rounded-3xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                        <i class="fas fa-clock text-purple-500 mr-3"></i>
+                        Yarış Beslenme Planlayıcı
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Yarış Türü</label>
+                            <select id="raceType" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="sprint">Sprint (&lt;90 dk)</option>
+                                <option value="olympic">Olimpik (90dk-3saat)</option>
+                                <option value="ironman" selected>Ironman (&gt;3 saat)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Beklenen Süre (saat)</label>
+                            <input type="number" id="expectedTime" value="10" step="0.5" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        <div>
+                            <button onclick="createRacePlan()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold mt-6">
+                                Plan Oluştur
+                            </button>
+                        </div>
+                    </div>
+                    <div id="racePlanResult" class="hidden">
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 p-6 rounded-xl">
+                            <h4 class="font-bold text-lg text-gray-800 dark:text-white mb-4 text-center">Yarış Beslenme Planı:</h4>
+                            <div id="racePlanContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Protocols -->
+        <section id="protocols" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+                        <i class="fas fa-list-check mr-4"></i>
+                        Pratik Protokoller
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Yarış öncesi ve sırası için adım adım uygulama rehberleri
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- 3-Day Pre-Race -->
+                    <div class="calculator-card rounded-3xl p-6 card-hover">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-calendar-days text-4xl text-green-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">Yarış Öncesi 3 Gün</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">1</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Glikojen Yüklemesi</p>
+                                    <p class="text-gray-600 dark:text-gray-400">10-12g/kg karbonhidrat alımı</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">2</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Hidrasyon</p>
+                                    <p class="text-gray-600 dark:text-gray-400">Günlük 35-40ml/kg sıvı</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">3</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Supplement Başlat</p>
+                                    <p class="text-gray-600 dark:text-gray-400">Beta-alanin, beetroot nitrat</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Race Morning -->
+                    <div class="calculator-card rounded-3xl p-6 card-hover">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-sun text-4xl text-yellow-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">Yarış Sabahı</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">1</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Kahvaltı</p>
+                                    <p class="text-gray-600 dark:text-gray-400">3-4 saat önce 200-300g karb</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">2</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Kafein</p>
+                                    <p class="text-gray-600 dark:text-gray-400">30-90 dk önce 3-6mg/kg</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">3</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Ön-yükleme</p>
+                                    <p class="text-gray-600 dark:text-gray-400">Başlamadan 15 dk önce 30g karb</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- During Race -->
+                    <div class="calculator-card rounded-3xl p-6 card-hover">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-running text-4xl text-red-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">Yarış Sırası</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">1</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Karbonhidrat</p>
+                                    <p class="text-gray-600 dark:text-gray-400">60-120g/saat (süreye göre)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">2</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Sıvı</p>
+                                    <p class="text-gray-600 dark:text-gray-400">500-1000ml/saat</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-1">3</div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-white">Elektrolit</p>
+                                    <p class="text-gray-600 dark:text-gray-400">200-700mg sodyum/saat</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scientific References -->
+        <section id="references" class="py-20 bg-gray-100 dark:bg-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold gradient-text mb-6">
+                        <i class="fas fa-book-open mr-4"></i>
+                        Bilimsel Kaynaklar
+                    </h2>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-4xl mx-auto">
+                    <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <p><strong>1.</strong> Rowlands, D. S., et al. (2015). Fructose–glucose composite carbohydrates and endurance performance. <em>Sports Medicine</em>, 45(11), 1561-1576.</p>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <p><strong>2.</strong> Areta, J. L., & Hopkins, W. G. (2018). Skeletal muscle glycogen content at rest and during endurance exercise in humans: a meta-analysis. <em>Sports Medicine</em>, 48(9), 2091-2102.</p>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <p><strong>3.</strong> Podlogar, T., & Wallis, G. A. (2022). New horizons in carbohydrate research and application for endurance athletes. <em>Sports Medicine</em>, 52(1), 5-26.</p>
+                        </div>
+                        <div class="border-l-4 border-orange-500 pl-4">
+                            <p><strong>4.</strong> Rothschild, J. A., & Bishop, D. J. (2020). Effects of dietary supplements on adaptations to endurance training. <em>Sports Medicine</em>, 50(1), 25-53.</p>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <p><strong>5.</strong> Ganio, M. S., et al. (2009). Effect of caffeine on sport-specific endurance performance: a systematic review. <em>Journal of Strength and Conditioning Research</em>, 23(1), 315-324.</p>
+                        </div>
+                        <div class="border-l-4 border-teal-500 pl-4">
+                            <p><strong>6.</strong> Shirreffs, S. M., & Sawka, M. N. (2011). Fluid and electrolyte needs for training, competition, and recovery. <em>Journal of Sports Sciences</em>, 29(S1), S39-S38.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4">Performansınızı Bir Üst Seviyeye Taşıyın</h3>
+                <p class="text-gray-200 max-w-2xl mx-auto">
+                    Bu rehber, bilimsel araştırmalara dayalı en güncel beslenme stratejilerini içermektedir. 
+                    Kişisel ihtiyaçlarınıza göre uyarlayın ve profesyonel destek almayı unutmayın.
+                </p>
+            </div>
+            
+            <div class="border-t border-white border-opacity-20 pt-8">
+                <p class="text-sm text-gray-300">
+                    <i class="fas fa-user-md mr-2"></i>
+                    Hazırlayan: <strong>Ümit Emre Erdoğan</strong> | 
+                    <i class="fas fa-calendar mr-2 ml-4"></i>
+                    2024 | 
+                    <i class="fas fa-flask mr-2 ml-4"></i>
+                    Bilimsel temelli beslenme rehberi
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.getElementById('body');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('light')) {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                themeIcon.className = 'fas fa-sun';
+                themeText.textContent = 'Açık Tema';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                themeIcon.className = 'fas fa-moon';
+                themeText.textContent = 'Koyu Tema';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.remove('light');
+            body.classList.add('dark');
+            themeIcon.className = 'fas fa-sun';
+            themeText.textContent = 'Açık Tema';
+        }
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Smooth Scroll for Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Calculator Functions
+        function calculateGlycogenDuration() {
+            const weight = parseFloat(document.getElementById('bodyWeight').value);
+            const intensity = parseFloat(document.getElementById('intensity').value);
+            
+            // Simplified calculation based on research data
+            const baseGlycogen = 400; // grams for 70kg athlete
+            const adjustedGlycogen = baseGlycogen * (weight / 70);
+            
+            // Consumption rate based on intensity (rough approximation)
+            const consumptionRate = (intensity / 70) * 3; // grams per minute
+            const durationMinutes = adjustedGlycogen / consumptionRate;
+            const durationHours = Math.floor(durationMinutes / 60);
+            const remainingMinutes = Math.round(durationMinutes % 60);
+            
+            document.getElementById('glycogenResult').classList.remove('hidden');
+            document.getElementById('durationText').textContent = `${durationHours} saat ${remainingMinutes} dakika`;
+        }
+
+        function calculateRatio() {
+            const totalCarbs = parseFloat(document.getElementById('totalCarbs').value);
+            const fructoseAmount = Math.round(totalCarbs * 0.44); // 0.8:1 ratio
+            const glucoseAmount = Math.round(totalCarbs * 0.56);
+            
+            document.getElementById('ratioResult').classList.remove('hidden');
+            document.getElementById('fructoseAmount').textContent = `${fructoseAmount}g`;
+            document.getElementById('glucoseAmount').textContent = `${glucoseAmount}g`;
+        }
+
+        function calculateNaturalMix() {
+            const targetCarbs = parseFloat(document.getElementById('targetCarbs').value);
+            
+            // Simplified natural food calculator
+            const dates = Math.round(targetCarbs * 0.3 / 8); // ~8g carbs per date
+            const banana = Math.round(targetCarbs * 0.4 / 25); // ~25g carbs per banana
+            const honey = Math.round(targetCarbs * 0.3 / 15); // ~15g carbs per tbsp
+            
+            document.getElementById('naturalMixResult').classList.remove('hidden');
+            document.getElementById('dateAmount').textContent = `${dates} adet`;
+            document.getElementById('bananaAmount').textContent = `${banana} adet`;
+            document.getElementById('honeyAmount').textContent = `${honey} yemek kaşığı`;
+        }
+
+        function calculateCaffeine() {
+            const weight = parseFloat(document.getElementById('caffeineWeight').value);
+            const dosage = parseFloat(document.getElementById('caffeineTarget').value);
+            
+            const totalCaffeine = Math.round(weight * dosage);
+            const coffeeAmount = Math.round(totalCaffeine / 80); // ~80mg per cup
+            const espressoAmount = Math.round(totalCaffeine / 120); // ~120mg per shot
+            const tabletAmount = Math.round(totalCaffeine / 200); // ~200mg per tablet
+            
+            document.getElementById('caffeineResult').classList.remove('hidden');
+            document.getElementById('caffeineAmount').textContent = `${totalCaffeine} mg`;
+            document.getElementById('coffeeAmount').textContent = `${coffeeAmount} fincan`;
+            document.getElementById('espressoAmount').textContent = `${espressoAmount} shot`;
+            document.getElementById('tabletAmount').textContent = `${tabletAmount} tablet`;
+        }
+
+        function calculateHydration() {
+            const weight = parseFloat(document.getElementById('hydrationWeight').value);
+            const duration = parseFloat(document.getElementById('exerciseDuration').value);
+            const temp = document.getElementById('temperature').value;
+            
+            let baseRate = 600; // ml/hour base
+            if (temp === 'hot') baseRate = 900;
+            if (temp === 'cool') baseRate = 500;
+            
+            const hourlyFluid = Math.round(baseRate * (weight / 70));
+            const totalFluid = Math.round(hourlyFluid * duration);
+            
+            const sodiumPerHour = Math.round(500 * (weight / 70));
+            const potassiumPerHour = Math.round(200 * (weight / 70));
+            const magnesiumPerHour = Math.round(30 * (weight / 70));
+            
+            document.getElementById('hydrationResult').classList.remove('hidden');
+            document.getElementById('hourlyFluid').textContent = `${hourlyFluid} ml`;
+            document.getElementById('totalFluid').textContent = `${totalFluid} ml`;
+            document.getElementById('sodiumNeed').textContent = `${sodiumPerHour} mg/saat`;
+            document.getElementById('potassiumNeed').textContent = `${potassiumPerHour} mg/saat`;
+            document.getElementById('magnesiumNeed').textContent = `${magnesiumPerHour} mg/saat`;
+        }
+
+        function createRacePlan() {
+            const raceType = document.getElementById('raceType').value;
+            const expectedTime = parseFloat(document.getElementById('expectedTime').value);
+            
+            let carbRate, fluidRate, sodiumRate;
+            let strategy = '';
+            
+            if (raceType === 'sprint') {
+                carbRate = '30-60g/saat';
+                fluidRate = '400-600ml/saat';
+                sodiumRate = '200-400mg/saat';
+                strategy = 'Minimal beslenme, önceden yükleme yeterli';
+            } else if (raceType === 'olympic') {
+                carbRate = '60-90g/saat';
+                fluidRate = '500-800ml/saat';
+                sodiumRate = '300-600mg/saat';
+                strategy = 'Orta düzey karbonhidrat, çoklu transport';
+            } else {
+                carbRate = '90-120g/saat';
+                fluidRate = '600-1000ml/saat';
+                sodiumRate = '400-700mg/saat';
+                strategy = 'Yüksek karbonhidrat, fruktoz:glikoz 0.8:1';
+            }
+            
+            const totalCarbs = Math.round(expectedTime * 90); // Average 90g/hour
+            const totalFluid = Math.round(expectedTime * 700); // Average 700ml/hour
+            
+            document.getElementById('racePlanResult').classList.remove('hidden');
+            document.getElementById('racePlanContent').innerHTML = `
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                            <h5 class="font-bold text-gray-800 dark:text-white mb-2">Karbonhidrat Stratejisi</h5>
+                            <p class="text-2xl font-bold text-purple-600">${carbRate}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Toplam: ~${totalCarbs}g</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                            <h5 class="font-bold text-gray-800 dark:text-white mb-2">Sıvı İhtiyacı</h5>
+                            <p class="text-2xl font-bold text-blue-600">${fluidRate}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Toplam: ~${totalFluid}ml</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                            <h5 class="font-bold text-gray-800 dark:text-white mb-2">Sodyum İhtiyacı</h5>
+                            <p class="text-2xl font-bold text-orange-600">${sodiumRate}</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                            <h5 class="font-bold text-gray-800 dark:text-white mb-2">Önerilen Strateji</h5>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">${strategy}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDqfZZJemkav5ql6JJZfUQWku9PGBSssQhhE5H%2BUcpWnrjY98MFmIHX0%2Fk3VdCGRy%2BzqDMo3tCqSmzNFx9X1SZ%2FreKIOmfmPLSJ3B8INFFJXblbbbVb40Vw6NCHr3Vs%2BqF9mLy8QOSMVDgMlsyVlcm8EhVjyqZ%2FLUTHm9QC3yT8q8R1FCTenKo4IjQsaUNxYf%2B%2BcljVvBhqRj9G%2F01s%2Fn9i5eDO%2BTPBi0FYWgmRUx%2F50YZOsOwX3R%2F7oRiK%2FxAh8myASUCuhB4Xm62QImB49lh7EHz76oAZL73EQfTCCSf%2Bn%2BquPcGGkEF0Yga6%2FLuawU7JCpqLlp0oPPkfdTVAMDvQBkNoBilgV7kUJMi5b2J4C2ThjRPvee3WYKgvHVPhkrG%2BxVAGdOzCDBKYqzXzRcGiVhvwI71WqNp0KQMvbfE%2FaA2M1VgsIR9FmOeaevz%2FHDQtXnPiVIceULMjdvULPiDvvKUY0sl0ZD%2FFZHs1P9DcktOk8U3aKz6u2IawT%2BzquWheUOV1a9pmYTM4rh71pbl3Q%3D";
+        window.__genspark_locale = "en-US";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDqfZZJemkav5ql6JJZfUQWku9PGBSssQhhE5H+UcpWnrjY98MFmIHX0/k3VdCGRy+zqDMo3tCqSmzNFx9X1SZ/reKIOmfmPLSJ3B8INFFJXblbbbVb40Vw6NCHr3Vs+qF9mLy8QOSMVDgMlsyVlcm8EhVjyqZ/LUTHm9QC3yT8q8R1FCTenKo4IjQsaUNxYf++cljVvBhqRj9G/01s/n9i5eDO+TPBi0FYWgmRUx/50YZOsOwX3R/7oRiK/xAh8myASUCuhB4Xm62QImB49lh7EHz76oAZL73EQfTCCSf+n+quPcGGkEF0Yga6/LuawU7JCpqLlp0oPPkfdTVAMDvQBkNoBilgV7kUJMi5b2J4C2ThjRPvee3WYKgvHVPhkrG+xVAGdOzCDBKYqzXzRcGiVhvwI71WqNp0KQMvbfE/aA2M1VgsIR9FmOeaevz/HDQtXnPiVIceULMjdvULPiDvvKUY0sl0ZD/FZHs1P9DcktOk8U3aKz6u2IawT+zquWheUOV1a9pmYTM4rh71pbl3Q=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
